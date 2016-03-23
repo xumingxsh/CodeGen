@@ -1,0 +1,16 @@
+﻿#foreach($item in $data.BaseDetail.Columns)
+
+#set($name="$item.CNName")
+#if($item.CNName.Length > 5)
+#set($name="$item.CNName.Substring(0, 5)")
+#end
+#set($rexId="${data.BaseDetail.FirstCharUpper}_$item.FirstCharUpper")
+        /// <summary>
+        ///   查找类似 必须是$name 的本地化字符串。
+        /// </summary>
+        internal static string $rexId {
+            get {
+                return ResourceManager.GetString("$rexId", resourceCulture);
+            }
+        }        
+#end

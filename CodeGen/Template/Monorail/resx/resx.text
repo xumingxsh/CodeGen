@@ -1,0 +1,14 @@
+﻿#foreach($item in $data.BaseDetail.Columns)
+#set($name="$item.CNName")
+#if($item.CNName.Length > 5)
+#set($name="$item.CNName.Substring(0, 5)")
+#end
+<data name="${data.BaseDetail.FirstCharUpper}_$item.FirstCharUpper" xml:space="preserve">
+    <value>$name</value>
+    <comment>$item.CNName</comment>
+  </data>
+<data name="${data.BaseDetail.FirstCharUpper}_${item.FirstCharUpper}_rmk" xml:space="preserve">
+    <value></value>
+    <comment>$item.CNName</comment>
+  </data>
+#end

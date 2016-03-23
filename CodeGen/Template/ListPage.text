@@ -1,0 +1,109 @@
+﻿#macro(DataGrideColumnsEx)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsGUID || $item.IsMarking || $item.IsFK)
+                <asp:BoundColumn DataField="$item.ColumnName" Visible="False" />
+#else
+                <cc1:XMRBoundColumn DataField="$item.ColumnName" HeaderTextID="Column.${item.TableName}.$item.ColumnName" />
+#end
+#end
+#foreach($item in $data.BaseDetail.FKs)
+#set($dt=$item.ParentTableInfo)
+
+#foreach($it in $dt.Columns)
+#if(!$it.IsPK)
+#if($it.IsGUID || $it.IsMarking || $it.IsFK)
+                <asp:BoundColumn DataField="$it.ColumnName" Visible="False" />
+#else
+                <cc1:XMRBoundColumn DataField="$it.ColumnName" HeaderTextID="Column.${it.TableName}.$it.ColumnName" />
+#end
+#end
+#end
+#end
+#end
+#macro(TemplateMacroColumn)
+#foreach($item in $data.BaseDetail.PKs)
+                        <input type="hidden" id="id$item.ColumnName" value='<%# DataBinder.Eval(Container.DataItem, "$item.ColumnName", "")%>' NAME="id$item.ColumnName">
+#end
+#if ($data.BaseDetail.PKs.Count < 1)
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#if($index<1)
+                        <input type="hidden" id="id$item.ColumnName" value='<%# DataBinder.Eval(Container.DataItem, "$item.ColumnName", "")%>' NAME="id$item.ColumnName">
+#end
+#set($index=$index + 1) 
+#end
+#end
+#end
+#macro(QueryStringListScript)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+        var $item.ColumnName = getCheckKeyId(Table, 0, $index);
+#set($index=$index + 1) 
+#end
+#if($index == 0)
+#foreach($item in $data.BaseDetail.Columns)
+#if($index<1)
+        var $item.ColumnName = getCheckKeyId(Table, 0, 0);
+#end
+#set($index=$index + 1) 
+#end
+#end
+#end
+#macro(QueryString)
+#set($index=0)"#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0)+ "&#end$item.ColumnName=" + $item.ColumnName #set($index=$index + 1) 
+#end
+#if($index == 0)
+#foreach($item in $data.BaseDetail.Columns)#if($index<1)$item.ColumnName=" + $item.ColumnName#end
+#set($index=$index + 1) 
+#end
+#end
+#end
+#parse("Template/head.text")
+#set($tableName=$data.TableClassName)
+#set($CName="$data.TableCNName--列表")
+#pageTitle($tableName $CName)
+    
+<asp:Content ID="Main" ContentPlaceHolderID="DefaultContent" runat="server">
+
+    <script type="text/javascript">    
+    // 操作表名称
+    // 作者：$data.UserName
+    // 创建日期：$data.Today
+    function GetTableName()
+    {
+        return "${data.TableClassName}";
+    }
+    
+    // 参数字符串
+    // 作者：$data.UserName
+    // 创建日期：$data.Today
+    function GetQuery()
+    {
+        var Table = document.all("<%=dgdList.ClientID %>");
+#QueryStringListScript()
+
+        return #QueryString();
+    }
+    </script>
+    <div align="Center">
+        <cc1:DataGridEx ID="dgdList" SkinID="dgdListEx" 
+            SQLFiledID="DATA.${data.BaseDetail.TableName.ToUpper()}DT.DBFIELDLISTEX" SQLTableID="DATA.${data.BaseDetail.TableName.ToUpper()}DT.DBTABLEEX" runat="server">
+            <Columns>
+                <asp:TemplateColumn>
+                    <HeaderTemplate>
+                        <input id="chkselectall" type="checkbox" onclick="checkallorno(this)" style="display: none">
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <asp:CheckBox id="chkID" onclick="ClickCheckInDataGrid(this)" runat="server" />
+#TemplateMacroColumn()
+
+                    </ItemTemplate>
+                </asp:TemplateColumn>
+#DataGrideColumnsEx()
+
+            </Columns>
+        </cc1:DataGridEx>
+    </div>
+    <asp:TextBox ID="txtSearchKey" runat="server" Text="DATA.${data.BaseDetail.TableName.ToUpper()}DT.SEARCHCOLUMNSLIST" Visible="false" />
+</asp:Content>

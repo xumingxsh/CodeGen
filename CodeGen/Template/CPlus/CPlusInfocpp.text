@@ -1,0 +1,128 @@
+﻿#parse("Template/head.text")
+#macro(InitVarsInfoFromRecorderInCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsInt)
+    rs.GetFieldValue("$item.ColumnName", this->m_${item.ColumnName});  // $item.CNName
+#elseif($item.IsDecimal)
+    DBOper::GetFieldStr("$item.ColumnName", this->m_$item.ColumnName);  // $item.CNName
+#else
+    DBOper::GetFieldStr("$item.ColumnName", this->m_$item.ColumnName, rs);  // $item.CNName
+#end
+#end
+#end#macro(InitVarsInfoFromHiDBMap)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsInt)
+    data->$item.ColumnName = Hi::getMapValueInt(mp, "$item.ColumnName");  // $item.CNName
+#elseif($item.IsDecimal)
+    data->$item.ColumnName = Hi::getMapValueDouble(mp, "$item.ColumnName");  // $item.CNName
+#else
+    data->$item.ColumnName = Hi::getMapValue(mp, "$item.ColumnName");  // $item.CNName
+#end
+#end
+#end
+#macro(InitVarsInfoInCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if ($item.IsInt || $item.IsDecimal)
+    this->m_$item.ColumnName = -1;  // $item.CNName
+#else
+    this->m_$item.ColumnName = "";  // $item.CNName
+#end
+#end
+#end
+#macro(listColumn)
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if($index > 1), #end ${data.BaseDetail.TableName}.${item.ColumnName}#end
+#end
+#macro(listColumnEx)
+#listColumn()#foreach($fk in $data.BaseDetail.FKs),$fk.ParentTableInfo.DBField#end
+#end
+/*==============================================================================
+* 名    称: ${data.TableClassName}Info.cpp
+* 说    明: ${data.TableCNName}信息类的源文件
+* 接    口:	
+
+* 调    用:	
+* 编    程:	$data.UserName	$data.Today
+*=============================================================================*/
+
+\#include ".\\${data.TableClassName}Info.h"
+
+/*------------------------------------------------------------------------------
+* 名    称: ${data.TableClassName}Info(void)
+* 说    明: 构造函数初始化
+* 参    数: void		
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+${data.TableClassName}Info::${data.TableClassName}Info(void)
+{
+#InitVarsInfoInCPlus()
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: ${data.TableClassName}Info(CDBRstValues& recs)
+* 说    明: 根据请求的记录集，构造对象
+* 参    数: CDBRstValues& recs		
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+${data.TableClassName}Info::${data.TableClassName}Info(CDBRstValues& recs)
+{
+#InitVarsInfoFromRecorderInCPlus()
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: ${data.TableClassName}Info(HiDBMap& mp)
+* 说    明: 根据请求的记录集，构造对象
+* 参    数: CDBRstValues& recs		
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+${data.TableClassName}Info::${data.TableClassName}Info(shared_ptr<${data.TableClassName}Info> data, HiDBMap& recs)
+{
+#InitVarsInfoFromHiDBMap()
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: GetAddSQL
+* 说    明: 取得添加语句
+* 参    数: 	
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+CString ${data.TableClassName}Info::GetAddSQL()
+{
+	return "#addSql()";
+	return "#addSqlForPython()";
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: GetEditSQL
+* 说    明: 取得编辑语句
+* 参    数: 	
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+CString ${data.TableClassName}Info::GetEditSQL()
+{
+	return "#editSql()";
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: GetGetSQL
+* 说    明: 取得一条记录的语句
+* 参    数: 	
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+CString ${data.TableClassName}Info::GetGetSQL()
+{
+	return "#getSql()";
+}
+
+/*------------------------------------------------------------------------------
+* 名    称: GetListSQL
+* 说    明: 取得列表语句
+* 参    数: 	
+* 返    回:	
+*-----------------------------------------------------------------------------*/
+CString ${data.TableClassName}Info::GetListSQL()
+{
+	return "SELECT #listColumn() FROM $data.BaseDetail.DBTable";
+}

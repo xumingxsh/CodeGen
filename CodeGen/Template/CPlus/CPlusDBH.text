@@ -1,0 +1,92 @@
+﻿#macro(SearchParamersCPlus)
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsDateTime)long $item.ColumnName, #elseif(${item.IsString})const char*  $item.ColumnName, #else${item.ColumnType}  $item.ColumnName, #end
+#end
+#end
+#macro(SearchParamersCommentCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+        *  @param[in]  $item.ColumnName  $item.CNName
+#end
+#end
+#macro(PKParamersCommentCPlus)
+#foreach($item in $data.BaseDetail.PKs)
+    *  @param[in] $item.PKColumn.ColumnName $item.PKColumn.CNName
+#end
+#end
+#macro(PKParamersCPlus)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0), #end
+#if($cl.IsDateTime)long ${cl.ColumnName}#elseif(${cl.IsString})const char* ${cl.ColumnName}#else${cl.ColumnType}  $cl.ColumnName#end
+#set($cl=$item.PKColumn)
+#set($index=$index + 1)
+#end
+#end
+#pragma once
+
+/**
+*    @defgroup ${data.TableCNName}数据操作类
+*    @brief    ${data.TableCNName}数据操作类。
+*	 @author   $data.UserName
+*    @date     $data.Today
+*
+* @par 修订历史
+*    @version v0.5 \n
+*	 @author  $data.UserName
+*    @date    $data.Today
+*    @li 初始版本
+* @{
+*/
+
+\#include "../Data/${data.TableClassName}DT.h"
+
+/**
+* @brief ${data.TableCNName}数据操作类
+*
+*/
+class ${data.TableClassName}DB
+{
+public:
+
+	/** @brief 构造函数*/
+	${data.TableClassName}DB(void);
+	
+	/** @brief 析构函数*/
+	~${data.TableClassName}DB(void);
+public:
+
+	/** 
+	*  @brief 取得${data.TableClassName}数据列表
+#SearchParamersCommentCPlus()
+	*  @param[out] list   查询集合
+	*/
+	void GetList(#SearchParamersCPlus() HisCommon::${data.TableClassName}List& list);
+	
+	/** 
+	*  @brief 添加${data.TableClassName}记录
+	*  @param[in]  data 要添加的数据
+	*/
+	void Add(const ${data.TableClassName}DT& data);
+	
+	/** 
+	*  @brief 修改${data.TableClassName}记录
+	*  @param[in]  data 要修改的数据
+	*/
+	void Edit(const ${data.TableClassName}DT& data);
+	
+	/** 
+	*  @brief 删除${data.TableClassName}记录
+#PKParamersCommentCPlus()
+	*/
+	void Delete(#PKParamersCPlus());
+	
+	/** 
+	*  @brief 获取${data.TableClassName}记录详细信息
+#PKParamersCommentCPlus()
+	*  @param[out] data   详细信息
+	*/
+	void Detail(#PKParamersCPlus(), HisCommon::${data.TableClassName}DT& data);
+};
+
+/**//** @}*/ // Table_Class_Name#数据操作类

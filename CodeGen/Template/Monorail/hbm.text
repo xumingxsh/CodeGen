@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+    <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+        <!--${data.BaseDetail.CNName}-->
+        <class name="TopSharp.Model.${data.BaseDetail.TableName},TopSharp.Model" table="$data.BaseDetail.TableName">
+#if($data.BaseDetail.PKs.Count > 1)
+            <composite-id unsaved-value="any">
+#foreach($it in $data.BaseDetail.PKs)
+#set($dt="String")
+#if($it.IsInt32)
+#set($dt="Int32")
+#end
+#if($it.IsInt64)
+#set($dt="Int64")
+#end
+#if($it.Int16)
+#set($dt="Int16")
+#end
+#if($it.IsDateTime)
+#set($dt="DateTime")
+#end
+            <!--${it.CNName}-->
+            <key-property name="$it.PropertyName" column="$it.ColumnName" type="$dt" length="$it.Length" />
+#end
+            </composite-id>
+#end
+#if($data.BaseDetail.PKs.Count == 1)
+#foreach($it in $data.BaseDetail.PKs)
+#set($dt="String")
+#if($it.PKColumn.IsInt32)
+#set($dt="Int32")
+#end
+#if($it.PKColumn.IsInt64)
+#set($dt="Int64")
+#end
+#if($it.PKColumn.Int16)
+#set($dt="Int16")
+#end
+#if($it.PKColumn.IsDateTime)
+#set($dt="DateTime")
+#end
+            <!--${it.PKColumn.CNName}-->
+            <id name="$it.PKColumn.PropertyName" column="$it.ColumnName" type="$dt" >
+                <generator class="assigned"/>
+            </id>
+#end            
+#end
+#foreach($item in $data.BaseDetail.Columns)
+#if(!$item.IsPK)
+#set($dt="String")
+#if($item.IsInt32)
+#set($dt="Int32")
+#end
+#if($item.IsInt64)
+#set($dt="Int64")
+#end
+#if($item.Int16)
+#set($dt="Int16")
+#end
+#if($item.IsDateTime)
+#set($dt="DateTime")
+#end
+            <!--${item.CNName}-->
+            <property name="$item.PropertyName" column="$item.ColumnName" type="$dt" length="$item.Length" />
+#end
+#end
+        </class>
+    </hibernate-mapping>
+</xml>

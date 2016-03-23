@@ -1,0 +1,50 @@
+﻿#macro( paramComment ) 
+#foreach($item in $data.BaseDetail.PKs)
+     * @param[in] $item.PKColumn.ColumnName $item.PKColumn.CNName
+#end
+#end 
+#macro( params )
+#set($i=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($i > 0), #end$item.PKColumn.Java_DateType $item.PKColumn.FirstCharLower #set($i=$i+1)
+#end
+#end
+package com.ivsm.db;
+
+import java.util.List;
+
+import com.ivsm.model.${data.TableClassName}PO;
+
+public interface ${data.TableClassName}Mapper {
+
+    /**
+     * 取得记录集
+     * @return 记录集
+     */
+    List<${data.TableClassName}PO> getList();
+	
+    /**
+     * 取得一条记录
+#paramComment( )
+     * @return 取得的记录
+     */
+    ${data.TableClassName}PO get(#params());
+	
+    /**
+     * 添加记录
+     * @param 要添加的记录
+     */
+    void add(${data.TableClassName}PO data);
+	
+    /**
+     * 编辑记录
+     * @param 要编辑的记录
+     */
+    void edit(${data.TableClassName}PO data);
+	
+    /**
+     * 删除记录
+#paramComment( )
+     */
+    void delete(#params());
+}

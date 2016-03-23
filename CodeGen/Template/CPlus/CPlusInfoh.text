@@ -1,0 +1,46 @@
+﻿#macro(VarsInCPlusInfoH)
+#foreach($item in $data.BaseDetail.Columns)
+#set($type="std::string")
+#if ($item.IsInt || $item.IsDateTime)
+#set($type="long       ")
+#elseif($item.IsDecimal)
+#set($type="double       ")
+#end
+            $type $item.ColumnName;  	/**< $item.CNName */
+#end
+#end
+#pragma once
+
+\#include "BaseInfo.h"
+
+/*==============================================================================
+* 名    称: ${data.TableClassName}Info.h
+* 说    明: ${data.TableCNName}信息类的头文件
+* 接    口:	
+
+* 调    用:	
+* 编    程:	$data.UserName	$data.Today
+*=============================================================================*/
+class ${data.TableClassName}Info : BaseInfo
+{
+public:
+	${data.TableClassName}Info(void);
+	
+	// 根据请求的记录集，构造对象
+	${data.TableClassName}Info(CDBRstValues& recs);
+public:
+#VarsInCPlusInfoH()
+
+private:
+	// 取得添加语句
+	CString		GetAddSQL();
+
+	// 取得编辑语句
+	CString		GetEditSQL();
+
+	// 取得查询语句
+	CString		GetGetSQL();
+
+	// 取得列表语句
+	CString		GetListSQL();
+};

@@ -1,0 +1,505 @@
+﻿#macro(title) 
+/// <copyright>$data.CorpName</copyright>
+/// <version>1.0</version>
+/// <author>$data.UserName</author>
+/// <email>$data.EMail</email>
+/// <log date="$data.Today">创建</log>
+#end
+#macro(pageTitle $tableName $CName) 
+<%@ Page Language="C#" CodeFile="${tableName}_Add.aspx.cs" Inherits="Tables_${tableName}_Add"
+    MasterPageFile="~/Master/AddEditMaster.master" Title="$CName" %>
+#end
+#macro(addSql) 
+INSERT INTO ${data.TableClassName}(#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")$item.ColumnName #if($index!=${data.BaseDetail.Columns.Count}), #end
+#end
+#end) VALUES(#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")@$item.ColumnName #if($index!=${data.BaseDetail.Columns.Count}), #end
+#end
+#end)
+#end
+#macro(editSql) 
+UPDATE ${data.TableClassName} SET #set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && !$item.IsPK && $item.DefaultValue != "当前日期")
+$item.ColumnName = @$item.ColumnName #if($index!=$data.BaseDetail.Columns.Count),#end
+#end
+#end WHERE $data.BaseDetail.GetQuery()
+#end
+#macro(getSql) 
+SELECT #set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if($index > 1), #end ${item.ColumnName}#end FROM ${data.TableClassName} WHERE $data.BaseDetail.GetQuery()
+#end
+#macro(deleteSql) 
+DELETE ${data.TableClassName} WHERE $data.BaseDetail.GetQuery()
+#end
+#macro(dataSourceSql)
+#set($fkcl=$data.BaseDetail.GetFKColumn())
+#if($fkcl=="")SELECT 1 AS KeyValue,2 AS KeyText FROM ${data.TableClassName};#else
+#set($fkT=$data.BaseDetail.GetFKTextColumn($fkcl))
+SELECT $fkcl AS KeyValue,$fkT AS KeyText FROM [${data.TableClassName}];#end
+#end
+#macro(dataSourceSql)
+#set($fkcl=$data.BaseDetail.GetFKColumn())
+#if($fkcl=="")SELECT 1 AS KeyValue,2 AS KeyText FROM ${data.TableClassName};#else
+#set($fkT=$data.BaseDetail.GetFKTextColumn($fkcl))
+SELECT $fkcl AS KeyValue,$fkT AS KeyText FROM [${data.TableClassName}];#end
+#end
+#macro(dataSearch)
+/// <summary>
+        /// 查询数据库表。
+        /// </summary>
+        private string SearchTableName
+        {
+            get
+            {
+                return $data.TableClassName;
+            }
+        }
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsGUID || $item.IsMarking || $item.IsFK)
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if ($item.FieldName== null || $item.FieldName == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper='" + $item.FieldName + "'";
+        }
+#else
+		/// <summary>
+		/// 查询条件函数：$item.CNName。
+		/// </summary>
+		public string Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+		{
+			if ($item.FieldName < 0)
+			{
+				return "";
+			}
+			return this.SearchTableName + "$item.FirstCharUpper=" + $item.FieldName;
+		}
+#end 
+#end 
+#if($item.IsDateTime)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName}== null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return this.SearchTableName + "$item.FirstCharUpper= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Greater_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return this.SearchTableName + "$item.FirstCharUpper> '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_GreaterEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper>= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Less_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper< '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LessEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper<= '" + ${item.FieldName} + "'";
+        }
+#end
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} = '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LIKE_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} LIKE '%" + ${item.FieldName} + "%'";
+        }
+#else
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper}=" + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Greater_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} > " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_GreaterEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} >= " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Less_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} < " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LessEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} <= " + ${item.FieldName};
+        }  
+#end  
+#end  
+#foreach($it in $data.BaseDetail.FKs)
+#set($item=$it.ParentTableInfo.GetFKTEXTColumnInfo($it.RColumnName))
+
+#if($item.IsGUID || $item.IsGUID || $item.IsMarking || $item.IsFK)
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if ($item.FieldName== null || $item.FieldName == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper='" + $item.FieldName + "'";
+        }
+#else
+		/// <summary>
+		/// 查询条件函数：$item.CNName。
+		/// </summary>
+		public string FK_Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+		{
+			if ($item.FieldName < 0)
+			{
+				return "";
+			}
+			return  "$item.TableName.$item.FirstCharUpper=" + $item.FieldName;
+		}
+#end 
+#end 
+#if($item.IsDateTime)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName}== null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return  "$item.TableName.$item.FirstCharUpper= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Greater_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return  "$item.TableName.$item.FirstCharUpper> '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_GreaterEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper>= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Less_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper< '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LessEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper<= '" + ${item.FieldName} + "'";
+        }
+#end
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} = '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LIKE_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} LIKE '%" + ${item.FieldName} + "%'";
+        }
+#else
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper}=" + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Greater_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} > " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_GreaterEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} >= " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Less_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} < " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LessEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return "$item.TableName.${item.FirstCharUpper} <= " + ${item.FieldName};
+        }  
+#end  
+#end
+#end#macro(addSqlForPython) 
+INSERT INTO ${data.TableClassName}(#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")$item.ColumnName #if($index!=${data.BaseDetail.Columns.Count}), #end
+#end
+#end) VALUES(#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")
+#if(!$item.IsInt && !$item.IsDecimalOrFloat)'#end${@$item.ColumnName}#if(!$item.IsInt && !$item.IsDecimalOrFloat)'#end #if($index!=${data.BaseDetail.Columns.Count}), #end
+#end
+#end)
+#end
+#set($tableName=$data.TableClassName)
+#set($CName="$data.TableCNName--列表编辑")
+#pageTitle($tableName $CName)
+
+<%@ Page Language="C#" MasterPageFile="~/Master/EditListMaster.master" AutoEventWireup="true"
+    CodeFile="#Table_Class_Name#_EditList.aspx.cs" Inherits="Tables_#Table_Class_Name#_EditList"
+    Title="#Table_CName#--列表编辑" %>
+
+<asp:Content ID="Main" ContentPlaceHolderID="DefaultContent" runat="Server">
+
+    <script type="text/javascript">
+    // 取得DataGrid对象。
+    // 作者：#Name#
+    // 创建日期：#CreateDate#
+    function GetDataGrid()
+    {
+        return document.getElementById("<%=dgdList.ClientID %>");
+    }
+
+    // 取得主键列。
+    // 作者：#Name#
+    // 创建日期：#CreateDate#
+    function GetPKCellLength()
+    {
+        return #PKSLength#;
+    }
+
+    // 取得主键字符串。
+    // item：编辑文本框
+    // itemName：编辑列名称
+    // 作者：作者：#Name#
+    // 创建日期：#CreateDate#
+    function GetPK(item, itemName)
+    {
+#PKS_Query_String_Script#
+        return QueryString;
+    }
+
+    // 编辑信息。
+    // pks：主键字符串
+    // itemName：编辑列名称
+    // itemValue：编辑列值
+    // type：数值类型
+    // 作者：#Name#
+    // 创建日期：#CreateDate#
+    function EditValue(pks, itemValue, itemName, type)
+    {
+        var response = Tables_#Table_Class_Name#_EditList.EditValue(pks, itemValue, itemName, type, EditValue_CallBack);
+        return false;
+    }
+    function EditValue_CallBack(response)
+    {
+        var text = response.value;
+        var div = document.getElementById("show");
+        div.innerHTML = text;        
+    }
+    </script>
+
+    <div id="show" style="display: inline; width: 160px; color: green; height: 16px" ms_positioning="FlowLayout" />
+    <asp:DataGrid ID="dgdList" SkinID="dgdList" runat="server">
+        <Columns>
+            <asp:TemplateColumn>
+                <ItemTemplate>
+#DataGirdTemplateList#
+                </ItemTemplate>
+            </asp:TemplateColumn>
+#DataGridColumnEditList#
+        </Columns>
+    </asp:DataGrid>
+</asp:Content>

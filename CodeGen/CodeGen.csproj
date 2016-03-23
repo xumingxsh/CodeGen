@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70D97581-EE2D-46FC-89C0-69223CA63C7D}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>CNFNOT.ICO</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>CodeGenD</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CodeGen</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/CodeGenD/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotLiquid, Version=1.6.1.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="DotLiquid.resources, Version=1.6.1.0, Culture=it, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\it\DotLiquid.resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="MySql.Data, Version=5.0.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Name>System.Web.Services</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="VTemplate.Engine, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\VTemplate.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.3.1.24483, Culture=neutral, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllColumns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllColumns.Designer.cs">
+      <DependentUpon>AllColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AllTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllTable.Designer.cs">
+      <DependentUpon>AllTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="App_Code\BaseDT\ColumnDT.cs" />
+    <Compile Include="App_Code\BaseDT\FKDT.cs" />
+    <Compile Include="App_Code\BaseDT\PKDT.cs" />
+    <Compile Include="App_Code\BaseDT\TableExpandDT.cs" />
+    <Compile Include="App_Code\Common.cs" />
+    <Compile Include="App_Code\Common\CodeObject.cs" />
+    <Compile Include="App_Code\Common\Template.cs" />
+    <Compile Include="App_Code\Common\TemplateDT.cs" />
+    <Compile Include="App_Code\DB\Market\DataMarket.cs" />
+    <Compile Include="App_Code\DB\Market\DataMarketInterface.cs" />
+    <Compile Include="App_Code\DB\Market\DataMarketMySQL.cs" />
+    <Compile Include="App_Code\DB\Market\DataMarketSQLServer.cs" />
+    <Compile Include="App_Code\DB\DBCommon.cs" />
+    <Compile Include="App_Code\DB\DBOper\Creator\DBCreator.cs" />
+    <Compile Include="App_Code\DB\DBOper\Creator\SQLServerCreator.cs" />
+    <Compile Include="App_Code\DB\DBOper\DBOperBase.cs" />
+    <Compile Include="App_Code\DB\DBOper\DBOper.cs" />
+    <Compile Include="App_Code\DB\DBOper\Creator\MySQLCreator.cs" />
+    <Compile Include="App_Code\DB\DBOper\Creator\OracleCreator.cs" />
+    <Compile Include="App_Code\DB\Market\DataMarketOracle.cs" />
+    <Compile Include="App_Code\FileContent.cs" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HdcCache.cs" />
+    <Compile Include="MainFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFrm.Designer.cs">
+      <DependentUpon>MainFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainInput.Designer.cs">
+      <DependentUpon>MainInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainPanel.Designer.cs">
+      <DependentUpon>MainPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadXML.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Records.Designer.cs">
+      <DependentUpon>Records.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegistFields.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableColumnInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TableColumnInfo.Designer.cs">
+      <DependentUpon>TableColumnInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TableMenum.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TableMenum.Designer.cs">
+      <DependentUpon>TableMenum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TableTree.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TableTree.Designer.cs">
+      <DependentUpon>TableTree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ControlUtils.cs" />
+    <Compile Include="Tool\MulitColumnsForGridView.cs" />
+    <Compile Include="Tool\MulitColumnsSortLogic.cs" />
+    <Compile Include="Tool\ObjectPropertyCompare.cs" />
+    <Compile Include="UserTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserTemplate.Designer.cs">
+      <DependentUpon>UserTemplate.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AllColumns.resx">
+      <DependentUpon>AllColumns.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AllTable.resx">
+      <DependentUpon>AllTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectServer.resx">
+      <DependentUpon>ConnectServer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainFrm.resx">
+      <DependentUpon>MainFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainInput.resx">
+      <DependentUpon>MainInput.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainPanel.resx">
+      <DependentUpon>MainPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PersonalInfo.resx">
+      <DependentUpon>PersonalInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Records.resx">
+      <DependentUpon>Records.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TableColumnInfo.resx">
+      <DependentUpon>TableColumnInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TableMenum.resx">
+      <DependentUpon>TableMenum.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TableTree.resx">
+      <DependentUpon>TableTree.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="App.ico" />
+    <Content Include="CNFNOT.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Template\AddCode.text" />
+    <EmbeddedResource Include="Template\AddPage.text" />
+    <EmbeddedResource Include="Template\CPlus\CPlusDB.text" />
+    <EmbeddedResource Include="Template\CPlus\CPlusDBH.text" />
+    <EmbeddedResource Include="Template\CPlus\CPlusInfocpp.text" />
+    <EmbeddedResource Include="Template\CPlus\CPlusInfoh.text" />
+    <EmbeddedResource Include="Template\CPlus\CPlusStruct.text" />
+    <EmbeddedResource Include="Template\Data2.vm" />
+    <EmbeddedResource Include="Template\EditCode.text" />
+    <None Include="app.config" />
+    <None Include="Template\Common\sql.text" />
+    <None Include="Template\EditListCode.text" />
+    <None Include="Template\EditListPage.text" />
+    <None Include="Template\head.text" />
+    <EmbeddedResource Include="Template\EditPage.text" />
+    <EmbeddedResource Include="Template\java\po.text" />
+    <EmbeddedResource Include="Template\java\mapper.text" />
+    <EmbeddedResource Include="Template\ListCode.text" />
+    <EmbeddedResource Include="Template\ListPage.text" />
+    <EmbeddedResource Include="Template\Monorail\resx\resx.text" />
+    <EmbeddedResource Include="Template\Monorail\resx\resxCode.text" />
+    <EmbeddedResource Include="Template\Monorail\vm\EditCode.text" />
+    <EmbeddedResource Include="Template\Monorail\hbm.text" />
+    <EmbeddedResource Include="Template\ProcedureSQL.text" />
+    <EmbeddedResource Include="Template\QueryCode.text" />
+    <EmbeddedResource Include="Template\QueryPage.text" />
+    <EmbeddedResource Include="Template\resource.text" />
+    <EmbeddedResource Include="Template\ViewCode.text" />
+    <EmbeddedResource Include="Template\ViewPage.text" />
+    <EmbeddedResource Include="Template\SQLXML.text" />
+    <EmbeddedResource Include="Template\tableinfo.text" />
+    <EmbeddedResource Include="UserTemplate.resx">
+      <DependentUpon>UserTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>xcopy ..\Template\* Template\ /s/e/y</PostBuildEvent>
+  </PropertyGroup>
+</Project>

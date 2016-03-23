@@ -1,0 +1,35 @@
+﻿
+$data.BaseDetail.TableName：$data.BaseDetail.CNName【$data.BaseDetail.TableName】
+==============================
+#if($data.BaseDetail.TableName == "存储过程")
+
+#else
+#foreach($item in $data.BaseDetail.PKs)
+主键名称：$item.PKName
+列名称：$item.ColumnName
+
+#end
+#if($data.BaseDetail.FKs.Count > 0)
+====================
+#end
+#foreach($item in $data.BaseDetail.FKs)
+外键名称：$item.FKName
+外键编号：$item.FKId
+外键列：$item.ColumnName
+主键表：$item.ParentTableName
+主键表编号：$item.ParentTableId
+主键列：$item.RColumnName
+
+#end
+#if($data.BaseDetail.FromTableFKs.Count > 0)
+====================
+#end
+#foreach($item in $data.BaseDetail.FromTableFKs)
+外键名称：$item.FKName
+外键编号：$item.FKId
+外键表：$item.TableName
+外键列：$item.ColumnName
+主键列：$item.RColumnName
+
+#end
+#end

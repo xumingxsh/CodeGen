@@ -1,0 +1,177 @@
+﻿#macro(DelParamers)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0), #end"$item.ColumnName"#set($index=$index + 1)
+#end
+#if($data.BaseDetail.PKs.Count < 1)
+#foreach($item in $data.BaseDetail.Columns)"$item.ColumnName"#break
+#end
+#end
+#end
+#parse("Template/head.text")
+#title()
+
+using System;
+using System.Data;
+using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
+
+using DOTNET.Common;
+using DOTNET.Web;
+using Data;
+
+/// <summary>
+/// ${data.TableCNName}--查询。
+/// </summary>
+/// <author>$data.UserName</author>
+/// <log date="$data.Today">创建</log>
+public partial class Tables_${data.TableClassName}_Query : BaseListPage
+{
+    /// <summary>
+    /// 装载页面数据。
+    /// </summary>
+    /// <param name="sender">页面对象</param>
+    /// <param name="e">存储事件数据对象</param>
+    private void Page_Load(object sender, System.EventArgs e)
+    {    
+        try
+        {
+            if(!IsPostBack)
+            {
+#foreach($item in $data.BaseDetail.FKs)
+                ${item.FKColumn.ControlName}.GetBN += new GetBNHandler(GetBN);
+                ${item.FKColumn.ControlName}.DataBindEx(); 
+#end
+            }
+        }
+        catch(Exception ex)
+        {
+            this.OnException(ex);
+        }
+    }    
+
+    /// <summary>
+    /// 查询记录。
+    /// </summary>
+    /// <param name="source">提交按钮</param>
+    /// <param name="e">存储事件数据对象</param>
+    protected void btnSubmit_Click(object sender, System.EventArgs e)
+    {
+        try
+        {        
+            ${data.TableClassName}DT detail = new ${data.TableClassName}DT();
+            CommonSQLList cmList = new CommonSQLList();
+#foreach($item in $data.BaseDetail.Columns)
+#if(!$item.IsMarking && !$item.IsGUID)
+#if($item.IsFK)
+#if($item.IsString)
+            cmList.Filter = detail.Query_Equal_${item.FirstCharUpper}(${item.FirstCharUpper}.Value);
+#else
+            if (${item.ControlName}.Value.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_Equal_${item.FirstCharUpper}(${item.ConvertString}(${item.ControlName}.Value));
+            }
+#end
+#elseif (${item.IsDateTime})
+            cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(ui${item.FirstCharUpper}.FromValue);
+            cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(ui${item.FirstCharUpper}.ToValue); 
+#elseif (${item.IsInt32})
+            if (!ui${item.FirstCharUpper}.FromValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(Convert.ToInt32(ui${item.FirstCharUpper}.FromValue));
+            }
+            if (!ui${item.FirstCharUpper}.ToValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(Convert.ToInt32(ui${item.FirstCharUpper}.ToValue));
+            }
+#elseif (${item.IsInt64})
+            if (!ui${item.FirstCharUpper}.FromValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(Convert.ToInt64(ui${item.FirstCharUpper}.FromValue));
+            }
+            if (!ui${item.FirstCharUpper}.ToValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(Convert.ToInt64(ui${item.FirstCharUpper}.ToValue));
+            }
+#elseif (${item.IsInt16})
+            if (!ui${item.FirstCharUpper}.FromValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(Convert.ToInt16(ui${item.FirstCharUpper}.FromValue));
+            }
+            if (!ui${item.FirstCharUpper}.ToValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(Convert.ToInt16(ui${item.FirstCharUpper}.ToValue));
+            }
+#elseif (${item.IsDecimal})
+            if (!ui${item.FirstCharUpper}.FromValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(Convert.ToDecimal(ui${item.FirstCharUpper}.FromValue));
+            }
+            if (!ui${item.FirstCharUpper}.ToValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(Convert.ToDecimal(ui${item.FirstCharUpper}.ToValue));
+            }
+#elseif (${item.IsFloat})
+            if (!ui${item.FirstCharUpper}.FromValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_GreaterEqual_${item.FirstCharUpper}(Convert.ToSingle(ui${item.FirstCharUpper}.FromValue));
+            }
+            if (!ui${item.FirstCharUpper}.ToValue.Trim().Equals(""))
+            {
+                cmList.Filter = detail.Query_LessEqual_${item.FirstCharUpper}(Convert.ToSingle(ui${item.FirstCharUpper}.ToValue));
+            }
+#elseif (${item.IsString})
+            cmList.Filter = detail.Query_LIKE_${item.FirstCharUpper}(${item.ControlName}.Text);
+#end
+#end
+#end
+
+            this.dgdList.DataGridExFilter = cmList.Filter;
+            this.dgdList.GetBN += new GetBNHandler(GetBN);
+            this.dgdList.BindDataEx(true);
+        }
+        catch (Exception ex)
+        {
+            this.OnException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 删除。
+    /// </summary>
+    /// <param name="source">DataGrid控件</param>
+    /// <param name="e">存储事件数据对象</param>
+    protected void btnDel_Click(object sender, System.EventArgs e)
+    {
+        try
+        {
+            ${data.TableClassName}DT detail = this.GetDelPK();
+            CommonBaseBusiness bn = this.GetBN();
+            bn.Delete(detail);        
+			if (bn.IsError)
+			{
+				this.OnException(bn.ErrorText);
+				return;
+			}    
+            this.dgdList.GetBN += new GetBNHandler(GetBN);
+            this.dgdList.BindDataEx(true);
+        }
+        catch(Exception ex)
+        {
+            this.OnException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 取得要删除的记录信息。
+    /// </summary>
+    private ${data.TableClassName}DT GetDelPK()
+    {
+        string[] parms = {#DelParamers()};
+        string[] keys = this.GetKeyIdFormDataGrid(dgdList, parms);
+        ${data.TableClassName}DT detail = new ${data.TableClassName}DT();
+#DelParamers()
+
+        return detail;
+    }
+}

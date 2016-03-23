@@ -1,0 +1,81 @@
+﻿package com.ivsm.model;
+#set($hasDate = 0)
+#foreach($item in $data.BaseDetail.Columns)
+#if ($item.IsDateTime)
+#set($hasDate = 1)
+#end
+#end
+#if ($hasDate == 1)
+
+import java.util.Date;
+
+#end
+/**
+ * ${data.TableCNName}--业务对象。
+ * @author $data.UserName
+ * @version 1.0 $data.Today
+ *
+ */
+public class ${data.TableClassName}PO {	
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsDateTime)
+	
+    /**
+     * $item.CNName
+     */
+    private String $item.FirstCharLower;	
+#else
+    /**
+     * $item.CNName
+     */
+    private $item.Java_DateType $item.FirstCharLower;
+#end
+		
+#end
+
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsDateTime)
+    /**
+     * $item.CNName
+    */
+    public $item.Java_DateType get${item.FirstCharUpper()}Date() {
+		return DateCommon.ConvertToDate(this.$item.FirstCharLower);
+    }		
+		
+    /**
+     * $item.CNName
+     */
+    public void set${item.FirstCharUpper}Date($item.Java_DateType ${item.FirstCharLower}) {
+    }
+	
+    /**
+     * $item.CNName
+    */
+    public String get${item.FirstCharUpper()}() {
+        return this.$item.FirstCharLower;
+    }		
+		
+    /**
+     * $item.CNName
+     */
+    public void set${item.FirstCharUpper}(String ${item.FirstCharLower}) {
+        this.$item.FirstCharLower = $item.FirstCharLower;
+    }
+#else
+    /**
+     * $item.CNName
+    */
+    public $item.Java_DateType get${item.FirstCharUpper()}() {
+        return this.$item.FirstCharLower;
+    }		
+		
+    /**
+     * $item.CNName
+     */
+    public void set${item.FirstCharUpper}($item.Java_DateType ${item.FirstCharLower}) {
+        this.$item.FirstCharLower = $item.FirstCharLower;
+    }
+#end
+	 
+#end
+}

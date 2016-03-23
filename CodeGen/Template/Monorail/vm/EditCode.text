@@ -1,0 +1,37 @@
+﻿#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsMarking)
+<input type="hidden" name="item.$item.FirstCharUpper" value="\$!item.$item.FirstCharUpper"/>
+#else
+#set($inn=1)
+#if($item.IsNullable)
+#set($inn=0)
+#end
+#set($dt="")
+#blockcomponent(ROW with "text=$item.CNName" "notNull=$inn" "ex=1")		      			
+<input type="text" id="item.$item.FirstCharUpper" class="input_title" name="item.$item.FirstCharUpper" 
+value="\$!item.$item.FirstCharUpper"  #set($in=0)
+#if(!$item.IsNullable)
+#set($dt="Require")
+msg$in="$item.CNName必须填写" #set($in=$in+1) #end
+#if(!$item.IsString)
+#if(($dt!=""))
+#set($dt="${dt}|")
+#end
+#set($dt="${dt}LimitB") msg$in="$item.CNName输入的字节长度不能小于1，不能超过$item.Length" #set($in=$in+1)
+#end
+#if(!$item.IsInt)
+#if(($dt!=""))
+#set($dt="${dt}|")
+#end
+#set($dt="${dt}Number") msg$in="$item.CNName必须为整数！" #set($in=$in+1)
+#end
+#if(!$item.IsFloat)
+#if(($dt!=""))
+#set($dt="${dt}|")
+#end
+#set($dt="${dt}Double") msg$in="$item.CNName必须为整数或小数！" #set($in=$in+1)
+#end DataType="$dt" />
+\#end
+
+#end
+#end

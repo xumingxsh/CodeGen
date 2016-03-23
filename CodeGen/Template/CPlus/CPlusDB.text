@@ -1,0 +1,224 @@
+﻿#macro(SearchConditionCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if ($item.IsDateTime)
+    DBCommon::CreateCondition_Equal_Date("$item.ColumnName", $item.ColumnName, oss); // $item.CNName
+#else
+    DBCommon::CreateCondition_Equal("$item.ColumnName", $item.ColumnName, oss); // $item.CNName
+#end
+#end
+
+#end
+#macro(SearchParamersCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsDateTime)long $item.ColumnName, #elseif(${item.IsString})const char*  $item.ColumnName, #else${item.ColumnType}  $item.ColumnName, #end
+#end
+#end
+
+#macro(PKConditionParamCPlus)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0) , #end
+#set($cl=$item.PKColumn)
+#if($cl.IsDateTime) DBCommon::Time2String(${cl.ColumnName})  #else ${cl.ColumnName} #end
+#set($index=$index + 1)
+#end
+#end
+#macro(Map2StructCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if ($item.IsDateTime)
+    item.$item.ColumnName = DBCommon::String2Time(HisDBCell::GetValueInt(dbMap, "$item.ColumnName")); // $item.CNName
+#elseif($item.IsString)
+    item.$item.ColumnName = HisDBCell::GetValueStr(dbMap, "$item.ColumnName"); // $item.CNName
+#elseif($item.IsInt)
+    item.$item.ColumnName = HisDBCell::GetValueInt(dbMap, "$item.ColumnName"); // $item.CNName
+#else
+    item.$item.ColumnName = HisDBCell::GetValueDouble(dbMap, "$item.ColumnName"); // $item.CNName
+#end
+#end
+#end
+#macro(Struct2ParamersCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+#if ($item.IsDateTime)
+    params.Insert("$item.ColumnName", DBCommon::Time2String(item.${item.ColumnName}); // $item.CNName
+#else
+    params.Insert("$item.ColumnName", item.${item.ColumnName}); // $item.CNName
+#end
+#end
+#end
+#macro(PKParamersCPlus)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0), #end
+#if($cl.IsDateTime)long ${cl.ColumnName}#elseif(${cl.IsString})const char* ${cl.ColumnName}#else${cl.ColumnType}  $cl.ColumnName#end
+#set($cl=$item.PKColumn)
+#set($index=$index + 1)
+#end
+#end
+#macro(PKConditionCPlus)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0) AND #end${cl.ColumnName} = #set($cl=$item.PKColumn)
+#if(${cl.IsString})'%s'#elseif(${cl.IsInt})'%d'#else{0}'%'f#end
+#set($index=$index + 1)
+#end
+#end
+\#include "Common/DB/${data.TableClassName}DB.h"
+
+\#include <sstream>
+\#include <algorithm>
+
+\#include "Common/DBX/HisDBX.h"
+\#include "DBCommon.h"
+
+using namespace std;
+using namespace HisCommon;
+using namespace His;
+
+HisDBX g_DB;
+
+// 构造函数
+${data.TableClassName}DB::${data.TableClassName}DB(void)
+{
+}
+
+// 析构函数
+${data.TableClassName}DB::~${data.TableClassName}DB(void)
+{
+}
+
+// 将数据库查询结果转换为结构体
+static ${data.TableClassName}DT Get${data.TableClassName}DT(HisDBMap& dbMap);
+
+// 取得记录集合列表
+void ${data.TableClassName}DB::GetList(#SearchParamersCPlus() HisCommon::${data.TableClassName}List& list)
+{
+    ostringstream oss;
+
+#SearchConditionCPlus()
+    string condition = oss.str();
+
+    if (!condition.empty())
+    {
+        condition = " WHERE " + condition;
+    }
+
+    const char* sql = "SELECT * from ${data.TableClassName} {0} order by NUserID desc";
+
+    HisDBTable table;
+
+    try
+    {
+        if (!g_DB.ExecuteQuery(sql, &table, condition.c_str()))
+        {
+            throw DBException("数据库操作失败！");
+        }
+
+        for_each (table.begin(), table.end(), [&](HisDBMap& dbMap)
+            {
+                list.push_back(::Get${data.TableClassName}DT(dbMap));
+            });
+    }
+    catch(HisDBException& exp)
+    {
+        throw DBException(exp.what());
+    }
+}
+
+// 将结构体转换为参数集合，主要用于添加和编辑
+static void Init${data.TableClassName}Paramers(const ${data.TableClassName}DT& item, HisDBParamers& paramers);
+
+// 添加记录
+void ${data.TableClassName}DB::Add(const ${data.TableClassName}DT& item)
+{
+	HisDBParamers params;
+	InitUserParamers(item, params);
+
+	try
+	{
+	    if (!g_DB.Create("${data.TableClassName}", params))
+	    {
+            throw DBException("数据库操作失败！");
+	    }
+    }
+    catch(HisDBException& exp)
+    {
+        throw DBException(exp.what());
+    }
+}
+
+// 编辑记录
+void ${data.TableClassName}DB::Edit(const ${data.TableClassName}DT& item)
+{
+	HisDBParamers params;
+	Init${data.TableClassName}Paramers(item, params);
+
+	try
+	{
+	    if (!g_DB.Update("${data.TableClassName}", params, "#PKConditionCPlus()", #PKConditionParamCPlus()))
+	    {
+            throw DBException("数据库操作失败！");
+	    }
+    }
+    catch(HisDBException& exp)
+    {
+        throw DBException(exp.what());
+    }
+}
+
+// 删除记录
+void ${data.TableClassName}DB::Delete(#PKParamersCPlus())
+{
+    const char* sql = "DELETE * FROM ${data.TableClassName} WHERE #PKConditionCPlus()";
+
+    try
+    {
+        if (!g_DB.ExecuteNoQuery(sql, #PKConditionParamCPlus()))
+        {
+            throw DBException("数据库操作失败！");
+        }
+    }
+    catch(HisDBException& exp)
+    {
+        throw DBException(exp.what());
+    }
+}
+
+// 获取记录详细信息
+void ${data.TableClassName}DB::Detail(#PKParamersCPlus(), ${data.TableClassName}DT& data)
+{
+    const char* sql = "SELECT * FROM ${data.TableClassName} WHERE #PKConditionCPlus()";
+
+    try
+    {
+        HisDBTable table;
+        if (!g_DB.ExecuteQuery(sql, &table, #PKConditionParamCPlus()))
+        {
+            throw DBException("数据库操作失败！");
+        }
+
+        if (table.size() != 1)
+        {
+            throw LogicException("要访问的记录不存在！");
+        }
+        data = ::Get${data.TableClassName}DT(*table.begin());
+
+    }
+    catch(HisDBException& exp)
+    {
+        throw DBException(exp.what());
+    }
+}
+
+// 将记录转换为结构体
+static ${data.TableClassName}DT Get${data.TableClassName}DT(HisDBMap& dbMap)
+{
+    ${data.TableClassName}DT item;
+#Map2StructCPlus()
+    return item;
+}
+
+// 将结构体转换为参数集合
+static void Init${data.TableClassName}Paramers(const ${data.TableClassName}DT& item, HisDBParamers& params)
+{	
+#Struct2ParamersCPlus()
+}

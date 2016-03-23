@@ -1,0 +1,5 @@
+﻿    <MODULE id="${data.TableClassName}" script="数据库表【${data.TableClassName}】的基本数据库操作">
+#foreach($item in $data.BaseDetail.Columns)
+        <resource key="Column.${data.TableClassName}.$item.ColumnName" value="${item.Script}" script="【${data.TableClassName}】表【$item.ColumnName】列的文本描述。" /> 
+#end
+    </MODULE>

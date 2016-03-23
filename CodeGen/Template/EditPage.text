@@ -1,0 +1,118 @@
+﻿<%@ Page Language="C#" CodeFile="${data.TableClassName}_Edit.aspx.cs" Inherits="Tables_${data.TableClassName}_Edit"
+    MasterPageFile="~/Master/AddEditMaster.master" Title="$data.TableCNName编辑" %>
+    
+<asp:Content ID="Main" ContentPlaceHolderID="DefaultContent" runat="server">
+
+    <script type="text/javascript">    
+    // 操作表名称
+    // 作者：$data.UserName
+    // 创建日期：$data.Today
+    function GetTableName()
+    {
+        return "${data.TableClassName}";
+    }
+    </script>
+    <div align="Center">
+        <table class="MainTable" id="main" border="0">
+            <tr>
+                <td colspan="2" align="center">
+                    <b>编辑记录--$data.TableCNName</b><hr />
+                </td>
+            </tr>
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsGUID || $item.IsMarking)
+#continue
+#end
+#set($isNotNull="false")
+#if($item.IsNullable)
+#set($isNotNull="true")
+#end
+#if($item.IsFK)
+#set($id="")
+#foreach($it in $data.BaseDetail.FKs) 
+#if("$it.ColumnName.ToLower()" == "$item.ColumnName.ToLower()")
+#set($id="$it.ParentTableName.ToUpper()")
+#end
+#end
+            <tr>
+                <td class="lbltdcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                </td>
+                <td class="txttdcl1">
+                    <cc1:DropDownListEx ID="${item.ControlName}" TextID="Column.${item.TableName}.${item.FirstCharUpper}"
+                        SQLID="DATA.${id}DT.GETDATASOURCE" IsNotNull="${isNotNull}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                  <a href="..\${item.ParentTableName}\${item.ParentTableName}_Add.aspx" target="_blank">添加</a>
+                  </td>
+            </tr>
+#end
+#if($item.IsDateTime)
+            <tr>
+                <td class="lblTDcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                </td>
+                <td class="txtTDcl1">
+                    <cc1:TextBoxEx ID="${item.ControlName}" OnClick="ShowDateTime(this,'Date');" TextID="Column.${item.TableName}.${item.FirstCharUpper}" TypeName="DateTime" 
+                        IsNotNull="${isNotNull}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                </td>
+            </tr>
+#end
+#if($item.IsInt)
+            <tr>
+                <td class="lbltdcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                </td>
+                <td class="txttdcl1">
+                    <cc1:TextBoxEx ID="${item.ControlName}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" TypeName="int"
+                        IsNotNull="${isNotNull}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                </td>
+            </tr>
+#end
+#if($item.IsDecimalOrFloat)
+#if($item.Decimaldigits < 1)
+            <tr>
+                <td class="lbltdcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                </td>
+                <td class="txttdcl1">
+                    <cc1:TextBoxEx ID="${item.ControlName}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" TypeName="int"
+                        IsNotNull="${isNotNull}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                </td>
+            </tr>
+#else
+            <tr>
+                <td class="lbltdcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                </td>
+                <td class="txttdcl1">
+                    <cc1:TextBoxEx ID="${item.ControlName}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" TypeName="double" PreLength="${item.Decimaldigits}"
+                        IsNotNull="${isNotNull}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                </td>
+            </tr>
+#end
+#end
+            <tr>
+                <td class="lbltdcl1">
+                    <cc1:LabelEx ID="lbl${item.FirstCharUpper}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" IsNotNull="${isNotNull}"
+                        runat="server" />
+                  </td>
+                  <td class="txttdcl1">
+                    <cc1:TextBoxEx ID="${item.ControlName}" TextID="Column.${item.TableName}.${item.FirstCharUpper}" TypeName="string"
+                        IsNotNull="${isNotNull}" MaxValueLength="${item.Length}" ItemKey="${item.FirstCharUpper}" runat="server" />
+                </td>
+            </tr>
+#end
+            <tr>
+                <td align="center" colspan="2">
+                    <cc1:ButtonEx ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" SkinID="Submit" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <asp:TextBox ID="txtInitKey" runat="server" Text="DATA.${data.BaseDetail.TableName.ToUpper()}DT.GET" Visible="false" />
+    <asp:TextBox ID="txtOperKey" runat="server" Text="DATA.${data.BaseDetail.TableName.ToUpper()}DT.EDIT" Visible="false" />
+</asp:Content>

@@ -1,0 +1,120 @@
+﻿#macro(DelParamers)
+#set($index=0)
+#foreach($item in $data.BaseDetail.PKs)
+#if($index > 0), #end"$item.ColumnName"#set($index=$index + 1)
+#end
+#if($data.BaseDetail.PKs.Count < 1)
+#foreach($item in $data.BaseDetail.Columns)"$item.ColumnName"#break
+#end
+#end
+#end
+#macro(SetDelParamers)
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsPK)
+#if ($item.IsInt16)
+        detail.$item.FirstCharUpper = Convert.ToInt16(keys[$index]);
+#elseif ($item.IsInt32)
+        detail.$item.FirstCharUpper = Convert.ToInt32(keys[$index]);
+#elseif($item.IsInt64)
+        detail.$item.FirstCharUpper = Convert.ToInt64(keys[$index]);
+#elseif ($item.IsDecimal)
+        detail.$item.FirstCharUpper = Convert.ToDecimal(keys[$index]);
+#elseif ($item.IsFloat)
+        detail.$item.FirstCharUpper = Convert.ToSingle(keys[$index]);
+#else
+        detail.$item.FirstCharUpper = keys[$index];
+#end
+#end
+#if($data.BaseDetail.PKs.Count < 1)
+#break
+#end
+#set($index=$index + 1)
+#end
+#end
+#parse("Template/head.text")
+#title()
+
+using System;
+using System.Data;
+using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
+
+using DOTNET.Common;
+using DOTNET.Web;
+using Data;
+
+/// <summary>
+/// ${data.TableCNName}--列表记录。
+/// </summary>
+/// <author>$data.UserName</author>
+/// <log date="$data.Today">创建</log>
+public partial class Tables_${data.TableClassName}_List : BaseListPage
+{
+    /// <summary>
+    /// 装载页面数据。
+    /// </summary>
+    /// <param name="sender">页面对象</param>
+    /// <param name="e">存储事件数据对象</param>
+    private void Page_Load(object sender,  System.EventArgs e)
+    {
+        try
+        {
+            ((Master_ListMaster)this.Master).OnDeleteEvent += new Master_ListMaster.DeleteHandler(btnDel_Click);
+            ((Master_ListMaster)this.Master).OnSearchEvent += new Master_ListMaster.SearchHandler(OnSearch);
+            
+            if (!IsPostBack)
+            {
+                ((Master_ListMaster)this.Master).DataBindSearchByKey(this.txtSearchKey.Text);
+                
+                // 绑定DataGrid数据源
+                this.dgdList.GetBN += new GetBNHandler(GetBN);
+                this.dgdList.BindDataEx(true);
+            }
+        }
+        catch(Exception ex)
+        {
+            this.OnException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 列表查询。
+    /// </summary>
+    private void OnSearch(string sql)
+    {
+        this.dgdList.DataGridExFilter = sql;
+        this.dgdList.GetBN += new GetBNHandler(GetBN);
+        this.dgdList.BindDataEx(true);
+    }
+
+    /// <summary>
+    /// 删除。
+    /// </summary>
+    protected void btnDel_Click()
+    {
+        ${data.TableClassName}DT detail = this.GetDelPK();
+        CommonBaseBusiness bn = this.GetBN();
+        bn.Delete(detail);
+        if (bn.IsError)
+        {
+            this.OnException(bn.ErrorText);
+            return;
+        }
+        this.dgdList.GetBN += new GetBNHandler(GetBN);
+        this.dgdList.BindDataEx(true);
+    }
+
+    /// <summary>
+    /// 取得要删除的记录信息。
+    /// </summary>
+    private ${data.TableClassName}DT GetDelPK()
+    {
+        string[] parms = {#DelParamers()};
+        string[] keys = this.GetKeyIdFormDataGrid(dgdList, parms);
+        ${data.TableClassName}DT detail = new ${data.TableClassName}DT();
+#SetDelParamers()
+
+        return detail;
+    }
+}

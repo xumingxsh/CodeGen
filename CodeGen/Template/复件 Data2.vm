@@ -1,0 +1,407 @@
+﻿#parse("Template/head.text")
+#title()
+
+using System;
+using System.Data;
+
+namespace Data
+{
+    /// <summary>
+    /// $data.TableCNName表的描述类。
+    /// </summary>
+    /// <author>$data.UserName</author>
+    /// <log date="$data.Today">创建</log>
+    public class ${data.TableClassName}DT : BaseDataDT
+    {
+#foreach($item in $data.BaseDetail.Columns)
+        /// <summary>
+        /// $item.CNName
+        /// </summary>
+        private $item.CSDataType $item.FieldName;
+		
+#end
+#foreach($item in $data.BaseDetail.Columns)
+       /// <summary>
+       /// $item.CNName
+       /// </summary>
+       public virtual $item.CSDataType $item.PropertyName
+       {
+            set
+            {
+                $item.FieldName = value;
+            }
+            get
+            {
+                return $item.FieldName;
+            }
+        }
+		
+#end 
+        /// <summary>
+        /// 查询数据库表。
+        /// </summary>
+        private string SearchTableName
+        {
+            get
+            {
+                return $data.TableClassName;
+            }
+        }
+#foreach($item in $data.BaseDetail.Columns)
+#if($item.IsGUID || $item.IsMarking || $item.IsFK)
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if ($item.FieldName== null || $item.FieldName == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper='" + $item.FieldName + "'";
+        }
+#else
+		/// <summary>
+		/// 查询条件函数：$item.CNName。
+		/// </summary>
+		public string Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+		{
+			if ($item.FieldName < 0)
+			{
+				return "";
+			}
+			return this.SearchTableName + "$item.FirstCharUpper=" + $item.FieldName;
+		}
+#end 
+#end 
+#if($item.IsDateTime)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName}== null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return this.SearchTableName + "$item.FirstCharUpper= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Greater_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return this.SearchTableName + "$item.FirstCharUpper> '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_GreaterEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper>= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Less_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper< '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LessEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "$item.FirstCharUpper<= '" + ${item.FieldName} + "'";
+        }
+#end
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} = '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LIKE_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} LIKE '%" + ${item.FieldName} + "%'";
+        }
+#else
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper}=" + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Greater_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} > " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_GreaterEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} >= " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_Less_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} < " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string Query_LessEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return this.SearchTableName + "${item.FirstCharUpper} <= " + ${item.FieldName};
+        }  
+#end  
+#end  
+#foreach($it in $data.BaseDetail.FKs)
+#set($item=$it.ParentTableInfo.GetFKTEXTColumnInfo($it.RColumnName))
+
+#if($item.IsGUID || $item.IsGUID || $item.IsMarking || $item.IsFK)
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if ($item.FieldName== null || $item.FieldName == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper='" + $item.FieldName + "'";
+        }
+#else
+		/// <summary>
+		/// 查询条件函数：$item.CNName。
+		/// </summary>
+		public string FK_Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+		{
+			if ($item.FieldName < 0)
+			{
+				return "";
+			}
+			return  "$item.TableName.$item.FirstCharUpper=" + $item.FieldName;
+		}
+#end 
+#end 
+#if($item.IsDateTime)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName}== null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return  "$item.TableName.$item.FirstCharUpper= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Greater_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+
+            return  "$item.TableName.$item.FirstCharUpper> '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_GreaterEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper>= '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Less_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper< '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LessEqual_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.$item.FirstCharUpper<= '" + ${item.FieldName} + "'";
+        }
+#end
+#if($item.IsString)
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} = '" + ${item.FieldName} + "'";
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LIKE_${item.FirstCharUpper}(string ${item.FieldName})
+        {
+            if (${item.FieldName} == null || ${item.FieldName} == "")
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} LIKE '%" + ${item.FieldName} + "%'";
+        }
+#else
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Equal_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper}=" + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Greater_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} > " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_GreaterEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} >= " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_Less_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return  "$item.TableName.${item.FirstCharUpper} < " + ${item.FieldName};
+        }
+
+        /// <summary>
+        /// 查询条件函数：$item.CNName。
+        /// </summary>
+        public string FK_Query_LessEqual_${item.FirstCharUpper}($item.CSDataType ${item.FieldName})
+        {
+            if (${item.FieldName} < 0)
+            {
+                return "";
+            }
+            return "$item.TableName.${item.FirstCharUpper} <= " + ${item.FieldName};
+        }  
+#end  
+#end
+    }
+}

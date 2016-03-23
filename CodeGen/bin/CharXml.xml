@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--用户名称-->
+  <define itemname="userName" defname="25" value="徐敏荣">
+  </define>
+  <!--所属公司-->
+  <define itemname="corpName" defname="26" value="Xumingxsh">
+  </define>
+  <!--用户Email-->
+  <define itemname="email" defname="27" value="Xumingxsh21@126.com">
+  </define>
+  <!--服务器名称-->
+  <define itemname="serverName" defname="28" value="localhost">
+  </define>
+  <!--数据库名称-->
+  <define itemname="dataBase" defname="29" value="information_schema">
+  </define>
+  <!--数据库用户名称-->
+  <define itemname="userID" defname="30" value="root">
+  </define>
+  <!--数据库用户密码-->
+  <define itemname="passWord" defname="31" value="root">
+  </define>
+  <!--数据库用户密码-->
+  <define itemname="port" defname="33" value="3306">
+  </define>
+  <!--数据库类型-->
+  <define itemname="DBType" defname="32" value="MYSQL">
+  </define>
+  <!--列信息SQL语句：Oracle11g-->
+  <Column-Info-Oracle><![CDATA[
+      SELECT 
+      c.table_name AS TableName, 
+      c.column_name AS ColumnName,
+      data_type AS data_type, 
+      data_length as length, 
+      data_scale AS decimaldigits,
+      comments as Script,
+      data_default as DefaultValue,
+      nullable as isnullable, 
+      global_stats AS IsMarking, 
+     c.column_id as colid
+      from cols c left join user_col_comments cc on c.table_name=cc.table_name and c.column_name = cc.column_name
+      ]]></Column-Info-Oracle>
+  <!--列信息SQL语句：Sql-Server2005-->
+  <Column-Info-SQL-2005><![CDATA[
+      SELECT 
+      oj.Name AS TableName, 
+      cl.Name AS ColumnName,
+      tp.Name AS ColumnType, 
+      tp.xtype AS ColumnTypeIndex, 
+      cl.length, 
+      cl.xscale AS decimaldigits,
+      Script =  
+	      CASE  
+		      WHEN ep.[Value] IS Null THEN cl.Name 
+		      ELSE ep.[Value] 
+	      END,
+      DefaultValue = 
+	      CASE 
+		      WHEN cm.text IS NULL THEN '' 
+		      WHEN cm.text = '(getdate())' THEN '当前日期'  
+		      ELSE cm.text  
+	      END,
+      cl.isnullable, 
+      cl.colstat AS IsMarking, 
+      cl.id, oj.id as colid, 
+      oj.type AS ObjectType 
+      FROM sys.syscolumns cl 
+      LEFT JOIN sys.sysobjects oj ON oj.id = cl.id 
+      LEFT JOIN sys.systypes tp ON cl.xtype = tp.xtype 
+      LEFT JOIN sys.syscomments cm ON cm.id=cl.cdefault 
+      LEFT JOIN sys.extended_properties ep ON ep.major_id = cl.id AND ep.minor_id = cl.colid 
+      WHERE (oj.type='U' OR oj.type='P' OR oj.type='V') AND 
+      tp.Name != 'sysname' ORDER BY oj.id, cl.colid
+      ]]></Column-Info-SQL-2005>
+  <!--列信息SQL语句：Sql-Server2000-->
+  <Column-Info-SQL-2000><![CDATA[
+    SELECT 
+    oj.Name AS TableName, 
+    cl.Name AS ColumnName,
+    tp.Name AS ColumnType,
+    tp.xtype AS ColumnTypeIndex,
+     cl.length, 
+    cl.xscale AS decimaldigits,
+    Script =  
+	    CASE  
+		    WHEN ep.[Value] IS Null THEN cl.Name 
+		    ELSE ep.[Value] 
+	    END, 
+    DefaultValue = 
+	    CASE 
+		    WHEN cm.text IS NULL THEN '' 
+		    WHEN cm.text = '(getdate())' THEN '当前日期'  
+		    ELSE cm.text  
+	    END,
+    cl.isnullable, 
+    cl.colstat AS IsMarking,
+     cl.id, cl.colid, 
+    oj.type AS ObjectType 
+    FROM dbo.syscolumns cl
+    LEFT JOIN dbo.sysobjects oj ON oj.id = cl.id 
+    LEFT JOIN dbo.systypes tp ON cl.xtype = tp.xtype 
+    LEFT JOIN dbo.syscomments cm ON cm.id=cl.cdefault 
+    LEFT JOIN dbo.sysproperties ep ON ep.id = cl.id AND ep.smallid = cl.colid 
+    WHERE (oj.type='U' OR oj.type='P' OR oj.type='V') AND tp.Name != 'sysname' ORDER BY oj.id, cl.colid
+    ]]></Column-Info-SQL-2000>
+  <Column-Info-SQL-MYSQL><![CDATA[
+    select Table_Name as TableName,Column_Name as ColumnName,Data_Type,Column_Default,Is_Nullable,Column_Comment,CHARACTER_MAXIMUM_LENGTH, COLUMN_KEY, extra,NUMERIC_PRECISION,NUMERIC_SCALE from COLUMNS where TABLE_SCHEMA='{0}'
+    ]]></Column-Info-SQL-MYSQL>
+  <!--
+  外键信息SQL语句：Sql -Server 2005-->
+  <FK-SQL-2005><![CDATA[
+    SELECT 
+    OBJECT_NAME(fk.constid) AS FKName, 
+    fk.constid AS FKID,
+    OBJECT_NAME(fk.fkeyid) AS TableName, 
+    fk.fkeyid AS TableID, 
+    cl.name AS ColumnName, 
+    RCol.name AS RColumnName,
+    OBJECT_NAME(fk.rkeyid) AS ParentTableName, 
+    fk.rkeyid AS ParentTableID 
+    FROM sys.sysobjects oj 
+    INNER JOIN sys.sysforeignkeys fk ON  oj.xtype = 'F' AND  oj.id = fk.constid 
+    INNER JOIN sys.syscolumns cl ON fk.fkeyid = cl.id 
+    INNER JOIN sys.syscolumns RCol ON fk.rkeyid = RCol.id AND fk.fkey = cl.colid AND fk.rkey = RCol.colid
+    ]]></FK-SQL-2005>
+  <!--外键信息SQL语句：Sql -Server 2000-->
+  <FK-SQL-2000><![CDATA[
+    SELECT
+    OBJECT_NAME(fk.constid) AS FKName,
+    fk.constid AS FKID,
+    OBJECT_NAME(fk.fkeyid) AS TableName,
+    fk.fkeyid AS TableID,
+    cl.name AS ColumnName,
+    RCol.name AS RColumnName,
+    OBJECT_NAME(fk.rkeyid) AS ParentTableName,
+    fk.rkeyid AS ParentTableID
+    FROM dbo.sysobjects oj
+    INNER JOIN dbo.sysforeignkeys fk ON  oj.xtype = 'F' AND  oj.id = fk.constid
+    INNER JOIN dbo.syscolumns cl ON fk.fkeyid = cl.id
+    INNER JOIN dbo.syscolumns RCol ON fk.rkeyid = RCol.id AND fk.fkey = cl.colid AND fk.rkey = RCol.colid
+    ]]></FK-SQL-2000>
+  <FK-SQL-MYSQL><![CDATA[ 
+    SELECT
+    Constraint_Name AS FKName,
+    Table_Name  AS TableName,
+    Column_Name AS ColumnName,
+    Referenced_Column_Name AS RColumnName,
+    Referenced_table_Name AS ParentTableName
+    FROM Key_Column_USAGE Where Constraint_schema='{0}' and Referenced_table_Name is not NULL
+    ]]></FK-SQL-MYSQL>
+  <FK-SQL-Oracle><![CDATA[ 
+    select c.constraint_name, c.table_name,R_constraint_name,cc.column_name as RColumnName, 
+  cc.table_name as ParentTableName,cc2.column_name as ColumnName  from user_constraints c left join user_cons_columns cc on cc.constraint_name=c.R_constraint_name 
+  left join user_cons_columns cc2 on cc2.constraint_name=c.constraint_name  where c.constraint_type = 'R'
+    ]]></FK-SQL-Oracle>
+  <!--
+    表信息SQL语句：Sql-Server 2005 -->
+  <TableSQL-2005><![CDATA[
+    SELECT 
+    oj.Name as Script, 
+    oj.Name AS TableName,
+     oj.id AS id,
+     oj.crdate AS createDate,
+    oj.type AS tableType, 
+    0 as Category 
+     FROM sys.sysobjects oj 
+     ORDER BY oj.id
+        ]]></TableSQL-2005>
+  <!--表信息SQL语句：Sql-Server 2000 -->
+  <TableSQL-2000><![CDATA[
+    SELECT 
+    Script = 
+	    CASE 
+		    WHEN ep.[Value] IS NULL THEN oj.Name 
+		    ELSE ep.[Value]  
+	    END, 
+    oj.Name AS TableName, oj.id AS id,
+    oj.crdate AS createDate,
+    oj.type AS tableType, 
+    0 as Category 
+    FROM dbo.sysobjects oj 
+    LEFT JOIN dbo.sysproperties ep ON ep.id = oj.id AND ep.smallid = 0 
+    ORDER BY oj.id
+        ]]></TableSQL-2000>
+  <TableSQL-MySQL><![CDATA[
+    select table_Name as TableName, table_Comment as script, 'U' AS tableType from tables where TABLE_SCHEMA='{0}' 
+    union 
+    select table_Name as TableName, table_Name as script, 'V' AS tableType from views where TABLE_SCHEMA='{0}'
+        ]]></TableSQL-MySQL>
+  <TableSQL-Oracle><![CDATA[
+    select table_Name as TableName, comments as script, 'U' as tableType from user_tab_comments union
+	select view_name as TableName,  view_name as script, 'V' as tableType from User_Views union
+	select object_name as TableName,  object_name as script, 'P' as tableType from user_procedures
+        ]]></TableSQL-Oracle>
+</root>

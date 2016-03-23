@@ -1,0 +1,21 @@
+﻿#macro( addSql ) 
+INSERT INTO [${data.TableClassName}](
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")
+        $item.ColumnName #if($index!=${data.BaseDetail.Columns.Count}), 
+        #end
+#end
+#end
+	) VALUES(
+#set($index=0)
+#foreach($item in $data.BaseDetail.Columns)
+#set($index=$index+1)
+#if(!$item.IsMarking && $item.DefaultValue != "当前日期")
+        @$item.ColumnName #if($index!=${data.BaseDetail.Columns.Count}),
+         #end
+#end
+#end)
+#end 
+23423

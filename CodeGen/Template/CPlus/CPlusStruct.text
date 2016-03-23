@@ -1,0 +1,104 @@
+﻿#macro(VarsInCPlusInfoH)
+#foreach($item in $data.BaseDetail.Columns)
+#set($type="std::string")
+#if ($item.IsInt || $item.IsDateTime)
+#set($type="long       ")
+#elseif($item.IsDecimal)
+#set($type="double       ")
+#end
+            $type $item.ColumnName;  	/**< $item.CNName */
+#end
+#end
+
+#macro(CplusVaildate)
+#foreach($item in $data.BaseDetail.Columns)
+#if (!$item.IsGUID && !$item.IsMarking)
+
+            // $item.CNName
+#if ($item.IsString && !$item.IsNullable)
+            if (${item.ColumnName}.empty())
+            {
+                throw HisCommon::DataValidateException("“$item.CNName”不允许为空！");
+            }
+#end
+#if (!$item.IsString && !$item.IsNullable)
+            if (${item.ColumnName} == -1)
+            {
+                throw HisCommon::DataValidateException("“$item.CNName”不允许为空！");
+            }
+#end
+#if ($item.IsString && !$item.IsDateTime)
+            if (${item.ColumnName}.size() > ${item.Length})
+            {
+                throw HisCommon::DataValidateException("“$item.CNName”长度不允许大于${item.Length}！");
+            }
+#end
+#end
+#end
+#end
+#macro(ConvertCPlus)
+#foreach($item in $data.BaseDetail.Columns)
+        dest.$item.ColumnName = source.$item.ColumnName; // $item.CNName
+#end
+#end
+#pragma once
+
+/**
+*    @defgroup ${data.TableCNName}数据结构及相关函数
+*    @brief    ${data.TableCNName}数据结构及数据合法性检查、数据转换函数。
+*	 @author   $data.UserName
+*    @date     $data.Today
+*
+* @par 修订历史
+*    @version v0.5 \n
+*	 @author  $data.UserName
+*    @date    $data.Today
+*    @li 初始版本
+* @{
+*/
+
+\#include <string>
+\#include <vector>
+
+namespace HisCommon
+{
+	/** @brief ${data.TableCNName}数据结构*/
+	struct ${data.TableClassName}DT
+	{
+#VarsInCPlusInfoH()
+	};	
+	
+	/** @brief ${data.TableClassName}数据集合*/
+	typedef std::vector<${data.TableClassName}DT> ${data.TableClassName}List;
+	
+	/** 
+	*  @brief ${data.TableClassName}数据合法性检查
+	*  @param[in] item 要检查的数据
+	*/
+	void ${data.TableClassName}Vaildate(${data.TableClassName}DT& item)
+	{
+#CplusVaildate()
+	}
+	
+	/** 
+	*  @brief 将通用数据转换为ICE数据（${data.TableClassName}）
+	*  @param[in]  source 通用数据
+	*  @param[out] dest   ICE数据
+	*/
+	void HisCommon2ICE_${data.TableClassName}(const ${data.TableClassName}DT& source, ::HisLogic::${data.TableClassName}DT& dest)
+	{
+#ConvertCPlus()
+	}
+	
+	/** 
+	*  @brief 将ICE数据转换为通用数据（${data.TableClassName}）
+	*  @param[in]  source ICE数据
+	*  @param[out] dest   通用数据
+	*/
+	void ICE2HisCommon_${data.TableClassName}(const ::HisLogic::${data.TableClassName}DT& source, ${data.TableClassName}DT& dest)
+	{
+#ConvertCPlus()
+	}
+}
+
+/**//** @}*/ // Table_Class_Name#数据结构及相关函数

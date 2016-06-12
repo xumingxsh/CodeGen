@@ -39,7 +39,7 @@ namespace DockPanelSample
             TableExpandDT table = new TableExpandDT(tableView);
             tableName = table.TableName;
 
-            string sql = "select top 100 * from {0}  {1}";
+            string sql = "select top 100 * from [{0}]  {1}";
             List<PKDT> pks = table.PKs;
             string order = table.GetOrderStr();
             sql = string.Format(sql, table.TableName, order);

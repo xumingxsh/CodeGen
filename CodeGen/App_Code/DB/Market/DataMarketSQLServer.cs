@@ -274,6 +274,10 @@ sealed class DataMarketSQLServer : DataMarketInterface
     {
         DataView dv = this.GetUserTable();
         dv.RowFilter = "id = " + tableId;
+        if (dv.Count < 1)
+        {
+            return null;
+        }
         return dv[0];
     }
 

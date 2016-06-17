@@ -36,6 +36,10 @@ namespace DockPanelSample
         {
 
             DataRowView tableView = DataMarket.GetTableInfo(this.tableId);
+            if (tableView == null)
+            {
+                return;
+            }
             TableExpandDT table = new TableExpandDT(tableView);
             tableName = table.TableName;
 

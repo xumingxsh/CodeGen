@@ -31,6 +31,10 @@ namespace DockPanelSample
             {
                 // 设置数据库表列显示信息            
                 DataRowView tableView = DataMarket.GetTableInfo(this.tableId);
+                if (tableView == null)
+                {
+                    return;
+                }
                 TableExpandDT table = new TableExpandDT(tableView);
                 this.dgvColumns.AutoGenerateColumns = false;
                 this.dgvColumns.DataSource = table.Columns;

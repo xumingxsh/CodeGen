@@ -22,7 +22,7 @@ namespace DockPanelSample
         {
 
         }
-
+        
         public void SetTableID(int id)
         {
             this.tableId = id;
@@ -284,6 +284,8 @@ namespace DockPanelSample
         private void SetInputText(string text)
         {
             this.txtDisplayArea.Text = text;
+            CodeGen.Tool.ControlUtils.SetHTMLColor(this.txtDisplayArea);
+            this.Activate();
             //CodeGen.Tool.ControlUtils.SetHTMLColor(this.txtDisplayArea);
         }
     }

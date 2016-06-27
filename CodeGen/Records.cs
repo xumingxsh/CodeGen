@@ -121,7 +121,8 @@ namespace DockPanelSample
 
             if (this.txtInputArea.Text.Trim().ToLower().StartsWith("select "))
             {
-                this.txtLog.Text = "this is a seatch sql,please using search button!";
+                //this.txtLog.Text = "this is a seatch sql,please using search button!";
+                btnGetCode_Click(sender, e);
                 return;
 
             }

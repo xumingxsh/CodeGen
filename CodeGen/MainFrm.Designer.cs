@@ -73,9 +73,9 @@
             this.dcpMain.BackColor = System.Drawing.SystemColors.Menu;
             this.dcpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dcpMain.DockBackColor = System.Drawing.SystemColors.Menu;
-            this.dcpMain.Location = new System.Drawing.Point(0, 25);
+            this.dcpMain.Location = new System.Drawing.Point(0, 0);
             this.dcpMain.Name = "dcpMain";
-            this.dcpMain.Size = new System.Drawing.Size(708, 543);
+            this.dcpMain.Size = new System.Drawing.Size(708, 568);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;

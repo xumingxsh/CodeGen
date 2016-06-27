@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.txtInputArea2 = new System.Windows.Forms.TextBox();
             this.btnGetCode = new System.Windows.Forms.Button();
             this.dgList = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.txtInputArea = new System.Windows.Forms.RichTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.TextBox();
@@ -42,7 +43,6 @@
             this.btnExecuteNoQuery = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.sfCSV = new System.Windows.Forms.SaveFileDialog();
-            this.txtInputArea = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgList)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -77,8 +77,8 @@
             // 
             this.dgList.AllowUserToAddRows = false;
             this.dgList.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.dgList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.dgList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgList.Location = new System.Drawing.Point(0, 0);
@@ -109,6 +109,16 @@
             this.panel3.Size = new System.Drawing.Size(544, 74);
             this.panel3.TabIndex = 10;
             // 
+            // txtInputArea
+            // 
+            this.txtInputArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtInputArea.Location = new System.Drawing.Point(0, 0);
+            this.txtInputArea.Name = "txtInputArea";
+            this.txtInputArea.Size = new System.Drawing.Size(544, 74);
+            this.txtInputArea.TabIndex = 10;
+            this.txtInputArea.Text = "";
+            this.txtInputArea.TextChanged += new System.EventHandler(this.txtInputArea_TextChanged);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.panel6);
@@ -123,9 +133,9 @@
             // 
             this.panel6.Controls.Add(this.txtLog);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(189, 0);
+            this.panel6.Location = new System.Drawing.Point(280, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(355, 41);
+            this.panel6.Size = new System.Drawing.Size(264, 41);
             this.panel6.TabIndex = 1;
             // 
             // txtLog
@@ -136,7 +146,7 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(355, 41);
+            this.txtLog.Size = new System.Drawing.Size(264, 41);
             this.txtLog.TabIndex = 9;
             // 
             // panel5
@@ -147,12 +157,12 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(189, 41);
+            this.panel5.Size = new System.Drawing.Size(280, 41);
             this.panel5.TabIndex = 0;
             // 
             // btnCSV
             // 
-            this.btnCSV.Location = new System.Drawing.Point(81, 6);
+            this.btnCSV.Location = new System.Drawing.Point(81, 3);
             this.btnCSV.Name = "btnCSV";
             this.btnCSV.Size = new System.Drawing.Size(75, 23);
             this.btnCSV.TabIndex = 10;
@@ -162,13 +172,12 @@
             // 
             // btnExecuteNoQuery
             // 
-            this.btnExecuteNoQuery.Location = new System.Drawing.Point(12, 15);
+            this.btnExecuteNoQuery.Location = new System.Drawing.Point(162, 3);
             this.btnExecuteNoQuery.Name = "btnExecuteNoQuery";
             this.btnExecuteNoQuery.Size = new System.Drawing.Size(75, 23);
             this.btnExecuteNoQuery.TabIndex = 9;
             this.btnExecuteNoQuery.Text = "执行";
             this.btnExecuteNoQuery.UseVisualStyleBackColor = true;
-            this.btnExecuteNoQuery.Visible = false;
             this.btnExecuteNoQuery.Click += new System.EventHandler(this.btnExecuteNoQuery_Click);
             // 
             // panel4
@@ -179,16 +188,6 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(544, 237);
             this.panel4.TabIndex = 11;
-            // 
-            // txtInputArea
-            // 
-            this.txtInputArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtInputArea.Location = new System.Drawing.Point(0, 0);
-            this.txtInputArea.Name = "txtInputArea";
-            this.txtInputArea.Size = new System.Drawing.Size(544, 74);
-            this.txtInputArea.TabIndex = 10;
-            this.txtInputArea.Text = "";
-            this.txtInputArea.TextChanged += new System.EventHandler(this.txtInputArea_TextChanged);
             // 
             // Records
             // 

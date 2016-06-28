@@ -433,4 +433,9 @@ sealed class DataMarketMySQL : DataMarketInterface
             }
         }
     }
+
+    public string GetPVAFContent(int id)
+    {
+        return "";
+    }
 }

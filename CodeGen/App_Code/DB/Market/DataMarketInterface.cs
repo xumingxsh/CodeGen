@@ -59,4 +59,6 @@ public interface DataMarketInterface
     DataTable ExecuteDataTable(string sql);
 
     int ExecuteNoQuery(string sql);
+
+    string GetPVAFContent(int id);
 }

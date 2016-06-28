@@ -288,6 +288,11 @@ sealed class DataMarket
         return DB.GetView(id);
     }
 
+    public static string GetPVAFContent(int id)
+    {
+        return DB.GetPVAFContent(id);
+    }
+
     public static void ReadColumnDT(ColumnDT dt, DataRow dv)
     {
         DB.ReadColumnDT(dt, dv);

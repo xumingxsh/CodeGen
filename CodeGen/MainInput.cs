@@ -44,9 +44,9 @@ namespace DockPanelSample
                 this.SetInputText("");
                 return;
             }
-
-            this.SetInputText(this.GetTableInfo(this.tableId));
-            
+            string content =  this.GetTableInfo(this.tableId);
+            content += "\r\n\r\n\r\n" + DataMarket.GetPVAFContent(this.tableId);
+            this.SetInputText(content);            
         }
 
 

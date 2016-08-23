@@ -438,20 +438,20 @@ INSERT INTO ${data.TableClassName}(#set($index=0)
 using System;
 using System.Data;
 
-namespace Data
+namespace Model
 {
     /// <summary>
     /// $data.TableCNName表的描述类。
     /// </summary>
     /// <author>$data.UserName</author>
     /// <log date="$data.Today">创建</log>
-    public class ${data.TableClassName}DT : BaseDataDT
+    public class ${data.TableClassName}VO
     {
 #foreach($item in $data.BaseDetail.Columns)
        /// <summary>
        /// $item.CNName
        /// </summary>
-       public virtual $item.CSDataType $item.PropertyName {set; get;}
+       public $item.CSDataType $item.PropertyName {set; get;}
 		
 #end        
     }

@@ -10,16 +10,16 @@
   <define itemname="email" defname="27" value="Xumingxsh21@126.com">
   </define>
   <!--服务器名称-->
-  <define itemname="serverName" defname="28" value="192.168.0.254">
+  <define itemname="serverName" defname="28" value="192.168.100.65">
   </define>
   <!--数据库名称-->
-  <define itemname="dataBase" defname="29" value="edqmes">
+  <define itemname="dataBase" defname="29" value="mes_V1_0816">
   </define>
   <!--数据库用户名称-->
   <define itemname="userID" defname="30" value="sa">
   </define>
   <!--数据库用户密码-->
-  <define itemname="passWord" defname="31" value="aaaaaa">
+  <define itemname="passWord" defname="31" value="sa">
   </define>
   <!--数据库用户密码-->
   <define itemname="port" defname="33" value="3306">

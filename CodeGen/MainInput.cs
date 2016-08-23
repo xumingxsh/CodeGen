@@ -92,9 +92,10 @@ namespace DockPanelSample
             {
                 DataRowView tableView = DataMarket.GetTableInfo(this.tableId);
                 TableExpandDT table = new TableExpandDT(tableView);
-                if (table.TableType.Trim().ToLower() == "v")
+                if (table.TableType.Trim().ToLower() == "v" || table.TableType.Trim().ToLower() == "p")
                 {
-                    //return;
+                    DBInfo();
+                    return;
                 }
             }
             CodeObject obj = Template.s_CodeObjects[key];

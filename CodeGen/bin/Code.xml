@@ -13,7 +13,7 @@
       <key>Data2</key>
       <template>Template/Data2.vm</template>
       <target>Data//</target>
-      <fileType>DT.cs</fileType>
+      <fileType>VO.cs</fileType>
     </CodeObject>
     <CodeObject>
       <name>存储过程</name>
